@@ -18,8 +18,7 @@ const showResult = () => {
 
 <template>
 <div>
-    <h1>{{ msg }}</h1>
-
+  <h1>{{ msg }}</h1>
   <p>
     <input type="text" v-model="message"/>
   </p>
