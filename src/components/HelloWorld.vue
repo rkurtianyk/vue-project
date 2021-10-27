@@ -1,6 +1,4 @@
 <script>
-  import { ref } from 'vue'
-
   export default {
     data() {
       return {
@@ -10,30 +8,18 @@
           {title: 'My Title #3', url: 'github.com', hint: 'This is also hint'},
         ],
         colorModel: '',
-        colorValue: ''
-      }
-    },
-    watch: {
-      colorModel(newColor, oldColor) {
-        if (newColor !== '') {
-          this.setNewColor(newColor);
-        }
+        colors: [],
       }
     },
     name: 'HelloWorld',
-    props: {
-      msg: {
-        type: String
-      }
-    },
     methods: {
       setNewColor(value) {
         this.colorValue = value;
+      },
+      pressButton() {
+        this.colors.push(this.colorModel);
       }
     },
-    setup() {
-     // const color = ref('')
-    }
   }
 </script>
 
@@ -42,31 +28,32 @@
     <h1>Please enter color below:</h1>
     <input type="text" v-model="colorModel" />
     <button class="" type="button" @click="pressButton('My super text')">Press Me!</button>
-    <p :style="{ color: colorValue }">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magnam, tenetur nulla, 
-      laudantium aperiam asperiores excepturi non voluptas est quasi, animi culpa harum aliquam 
-      eveniet laboriosam ab obcaecati provident tempore iure?</p>
+    <div class="list">
+        <span v-for="c of colors" :key="c">
+          <span :style="{color: c}">{{c}}</span>
+        </span>
+    </div>
+
 
   </div>
 </template>
 
 <style scoped>
 
-  .paragraph input {
+  input {
     padding: 10px;
+    margin: 10px;
     font-size: 18px;
     border: 2px solid #000;
   }
 
-  .list {
-    font-size: 18px;
-    margin: 10px;
-    background-color: pink;
+  .list span {
+    display: inline-block;
+    margin-right: 10px;
   }
 
-  .link-item {
-    margin: 10px;
+  button {
+    padding: 15px;
   }
-  a {
-    color: #42b983;
-  }
+
 </style>
