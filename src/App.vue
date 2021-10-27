@@ -11,7 +11,8 @@ const handleClick = function(event) {
 <template>
 <div>
   <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello" @some-custom-emit="handleClick"/>
+
+  <HelloWorld msg="Hello" @press="handleClick"/>
 </div>
 
 </template>
