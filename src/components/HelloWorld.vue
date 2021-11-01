@@ -1,45 +1,57 @@
 <script>
   export default {
+    name: 'HelloWorld',
     data() {
       return {
-        links: [
-          {title: 'My Title #1', url: 'google.com', hint: 'It\'s a hint man'},
-          {title: 'My Title #2', url: 'leafletjs.org', hint: 'It\'s an another hint ma boy'},
-          {title: 'My Title #3', url: 'github.com', hint: 'This is also hint'},
-        ],
-        colorModel: '',
-        colors: [],
+        someNumber: null,
+        resultNumber: null,
       }
     },
-    name: 'HelloWorld',
     methods: {
-      setNewColor(value) {
-        this.colorValue = value;
+      increment() {
+        if (this.resultNumber) {
+          this.resultNumber++;
+        }
+      }, 
+      decrement() {
+        if (this.resultNumber) {
+          this.resultNumber--;
+        }
       },
-      pressButton() {
-        this.colors.push(this.colorModel);
+      onBlur() {
+        this.resultNumber = +this.someNumber;
+        this.someNumber = '';
       }
     },
+    computed: {
+      showResultBlock: function() {
+        return Boolean(this.resultNumber);
+      }
+    }
   }
 </script>
 
 <template>
   <div>
-    <h1>Please enter color below:</h1>
-    <input type="text" v-model="colorModel" />
-    <button class="" type="button" @click="pressButton('My super text')">Press Me!</button>
-    <div class="list">
-        <span v-for="c of colors" :key="c">
-          <span :style="{color: c}">{{c}}</span>
-        </span>
+    <h1>Please enter some number:</h1>
+    <input type="text" v-model="someNumber" v-on:blur="onBlur" v-focus/>
+    <div>
+      <button type="button" @click="increment()">Increment</button>
+      <br>
+      <button type="button" @click="decrement()">Decrement</button>
     </div>
 
-
+    <div v-if="showResultBlock"> 
+      <h3>Here is your number:</h3>
+      <p>{{resultNumber}}</p>
+    </div>
+    <div class="spinner-container" v-else>
+       <font-awesome-icon :icon="['fas', 'at']" :spin="true" />
+    </div>
   </div>
 </template>
 
 <style scoped>
-
   input {
     padding: 10px;
     margin: 10px;
@@ -47,13 +59,25 @@
     border: 2px solid #000;
   }
 
-  .list span {
-    display: inline-block;
-    margin-right: 10px;
+  input:focus {
+    outline: 0;
+    border: 2px solid blue;
+  }
+
+  .spinner-container {
+    margin-top: 10px;
+    font-size: 2rem;
   }
 
   button {
     padding: 15px;
+    margin-top: 5px;
+  }
+
+  .result {
+    display: inline-block;
+    width: 300px;
+    border: 1px solid black;
   }
 
 </style>
