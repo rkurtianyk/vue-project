@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import SuperButton from './components/SuperButton.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faSpinner, faAt } from '@fortawesome/free-solid-svg-icons'
@@ -16,4 +17,5 @@ createApp(App)
         }
     )
     .component("font-awesome-icon", FontAwesomeIcon)
+    .component("SuperButton", SuperButton)
     .mount('#app')

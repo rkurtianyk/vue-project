@@ -1,7 +1,6 @@
 <script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import HelloWorld from './components/HelloWorld.vue'
+import NumberForm from './components/NumberForm.vue'
+import SuperButton from './components/SuperButton.vue'
 
 const handleClick = function(event) {
   console.log(event);
@@ -12,7 +11,7 @@ const handleClick = function(event) {
 <div>
   <img alt="Vue logo" src="./assets/logo.png" />
 
-  <HelloWorld msg="Hello" @press="handleClick"/>
+  <NumberForm :header="'Please enter some number:'" :result="'Here is your number:'"/>
 </div>
 
 </template>

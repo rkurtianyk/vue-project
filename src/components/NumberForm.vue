@@ -1,12 +1,15 @@
 <script>
+import SuperButton from './SuperButton.vue'
+
   export default {
-    name: 'HelloWorld',
+    name: 'NumberForm',
     data() {
       return {
         someNumber: null,
         resultNumber: null,
       }
     },
+    props: ['header', 'result'],
     methods: {
       increment() {
         if (this.resultNumber) {
@@ -21,32 +24,31 @@
       onBlur() {
         this.resultNumber = +this.someNumber;
         this.someNumber = '';
+      },
+      showTheMeaning() {
+        console.warn('The Meaning')
       }
     },
-    computed: {
-      showResultBlock: function() {
-        return Boolean(this.resultNumber);
-      }
-    }
   }
 </script>
 
 <template>
   <div>
-    <h1>Please enter some number:</h1>
+    <h1>{{header}}</h1>
     <input type="text" v-model="someNumber" v-on:blur="onBlur" v-focus/>
     <div>
-      <button type="button" @click="increment()">Increment</button>
+      <SuperButton :text="'Increment'" :type="'main'" @onClick="increment()"/>
       <br>
-      <button type="button" @click="decrement()">Decrement</button>
+      <SuperButton :text="'Decrement'" :type="'regular'" @onClick="decrement()"/>
     </div>
 
-    <div v-if="showResultBlock"> 
-      <h3>Here is your number:</h3>
+    <div>
+      <h3>{{result}}</h3>
       <p>{{resultNumber}}</p>
     </div>
-    <div class="spinner-container" v-else>
-       <font-awesome-icon :icon="['fas', 'at']" :spin="true" />
+
+    <div>
+      <SuperButton :text="'SHOW ME THE MEANING'" @onClick="showTheMeaning()" :type="'regular'" circled="true"/>
     </div>
   </div>
 </template>
