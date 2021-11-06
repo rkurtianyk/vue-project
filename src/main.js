@@ -1,21 +1,12 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import SuperButton from './components/SuperButton.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
+import vuetify from './plugins/vuetify';
+import { loadFonts } from './plugins/webfontloader';
+import router from './router';
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSpinner, faAt } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-library.add(faSpinner, faAt)
+loadFonts();
 
 createApp(App)
-    .directive(
-        'focus', {
-            mounted(element) {
-                element.focus();
-            }
-        }
-    )
-    .component("font-awesome-icon", FontAwesomeIcon)
-    .component("SuperButton", SuperButton)
-    .mount('#app')
+  .use(router)
+  .use(vuetify)
+  .mount('#app');
