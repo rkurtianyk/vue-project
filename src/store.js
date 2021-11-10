@@ -13,19 +13,33 @@ const store = createStore({
       }
     },
     getters: {
-      doneTodos: (state) => {
-        return state.todos.filter(f => f.done)
-      }
+      doneTodos: s => s.todos.filter(f => f.done)
     },
     mutations: {
-      changeDone(state, id) {
+      makeTodoDone(state, id) {
         state.todos = state.todos.map(todoItem => {
-          if (todoItem.id === id) {
-            todoItem.done = !todoItem.done;
-          }
-          return todoItem;
-        })
+            if (todoItem.id === id) {
+              todoItem.done = true;
+            }
+            return todoItem;
+          })
+      },
+      markTodoUndone(state, id) {
+        state.todos = state.todos.map(todoItem => {
+            if (todoItem.id === id) {
+              todoItem.done = false;
+            }
+            return todoItem;
+          })
       }
+    },
+    actions: {
+        markAsDone(context, id) {
+            context.commit('makeTodoDone', id)
+        },
+        markAsUndone(context, id) {
+            context.commit('markTodoUndone', id)
+        }
     }
   })
   
