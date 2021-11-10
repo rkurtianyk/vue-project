@@ -1,31 +1,29 @@
 import { createStore } from 'vuex';
+import { State, TodoItem } from './models/state';
 
-const store = createStore({
-    state () {
-      return {
+
+const store = createStore<State>({
+    state: {
         todos: [
           { id: 0, text: 'buy some groceries', done: false },
           { id: 1, text: 'change wheels', done: false },
           { id: 2, text: 'finish homework', done: false }
         ],
-        count: 0,
-        version: '0.0.1'
-      }
     },
     getters: {
-      doneTodos: (s: any) => s.todos.filter(f => f.done)
+      doneTodos: (s: State): TodoItem[] => s.todos.filter(f => f.done)
     },
     mutations: {
-      makeTodoDone(state, id) {
-        state.todos = state.todos.map(todoItem => {
+      makeTodoDone(state: State, id: number): void {
+        state.todos = state.todos.map((todoItem: TodoItem): TodoItem => {
             if (todoItem.id === id) {
               todoItem.done = true;
             }
             return todoItem;
           })
       },
-      markTodoUndone(state, id) {
-        state.todos = state.todos.map(todoItem => {
+      markTodoUndone(state: State, id: number): void {
+        state.todos = state.todos.map((todoItem: TodoItem): TodoItem => {
             if (todoItem.id === id) {
               todoItem.done = false;
             }
