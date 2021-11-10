@@ -13,7 +13,7 @@ const store = createStore({
       }
     },
     getters: {
-      doneTodos: s => s.todos.filter(f => f.done)
+      doneTodos: (s: any) => s.todos.filter(f => f.done)
     },
     mutations: {
       makeTodoDone(state, id) {

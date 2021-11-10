@@ -13,6 +13,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
     "@mdi/font": "5.9.55",
     "roboto-fontface": "*",
+    "typescript": "^4.4.4",
     "vue": "^3.2.16",
     "vue-router": "^4.0.12",
     "vuetify": "^3.0.0-alpha.0",
