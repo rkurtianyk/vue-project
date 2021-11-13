@@ -1,6 +1,9 @@
 <template>
   <v-container>
-    <h1>TO DO list</h1>
+    <h1>
+      <span>TO DO list</span>
+      <button @click="logout()">Logout</button>
+      </h1>
     <div class="filter-panel">
       <label for="show-only-done">Show only done</label>
       <input id="show-only-done" type="checkbox" v-model="showOnlyDone" >
@@ -8,16 +11,22 @@
     <div class="list">
       <div v-for="todo in todos" :key="todo.id" class="list-item">
 
-        <div v-if="!editMode" :class="{'strike-through': todo.done}" class="text">{{todo.text}}</div>
-        <input v-if="editMode" class="text" v-model="todo.text" v-on:change="editTodo(todo)"/>
+        <div v-if="currentEditingTodo !== todo.id" :class="{'strike-through': todo.done}" class="text">{{todo.text}}</div>
+        <input v-if="currentEditingTodo === todo.id" class="text" v-model="todo.text" v-on:change="editTodo(todo)"/>
 
+        <button @click="editClick(todo)">
+                    <span v-if="currentEditingTodo !== todo.id">
+                      <font-awesome-icon icon="edit" />
+                    </span>                    
+                    <span v-if="currentEditingTodo === todo.id">
+                      <font-awesome-icon icon="check" />
+                    </span>
+        </button>
         <button @click="changeDone(todo)">
-          <span v-if="todo.done">Undone</span>
-          <span v-else>Done</span>
+           <font-awesome-icon icon="thumbs-up" />
         </button>
 
-        <button @click="deleteTodo(todo.id)">Delete</button>
-        <button @click="editClick(todo.id)">Edit</button>
+        <button @click="deleteTodo(todo.id)"> <font-awesome-icon icon="trash-alt" /></button>
       </div>
     </div>
 
@@ -31,6 +40,7 @@
 </template> 
 <script>
 import { db, } from '../api/firebaseDb';
+import AuthService from '../api/auth';
 import { getTodos, addTodo, deleteTodo, updateTodo } from '../api/todo';
 
 export default {
@@ -45,7 +55,6 @@ export default {
   },
   data() {
    return {
-     editMode: false,
      currentEditingTodo: '',
      showOnlyDone: false,
      currentTodos: [],
@@ -54,9 +63,15 @@ export default {
    }
   },
   methods: {
-    editClick(id) {
-      this.editMode = !this.editMode;
-      this.currentEditingTodo = id;
+    async editClick(todo) {
+      if (todo.id === this.currentEditingTodo) {
+        await this.editTodo(todo);
+        this.currentEditingTodo = '';
+        await this.loadTodos();
+      } else {
+      this.currentEditingTodo = todo.id;
+      }
+
     },
     async loadTodos() {
       this.firebaseTodos = await getTodos(db);
@@ -105,10 +120,13 @@ export default {
       try {
         await updateTodo(db, todo.id, data);
         await this.loadTodos();
-        this.editMode = false;
       } catch (e) {
         console.error(e);
       }
+    },
+    async logout() {
+      AuthService.logout();
+      this.$router.push('/login')
     }
   }
 

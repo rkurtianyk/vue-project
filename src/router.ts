@@ -1,34 +1,18 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import Home from './components/Home.vue';
-import About from './components/About.vue';
-import NotFound from './components/NotFound.vue'
-import NestedComponent from './components/NestedComponent.vue'
-
-const NumberPage = () => import('./components/NumberPage.vue')
+import Login from './components/Login.vue';
+import NotFound from './components/NotFound.vue';
+import AuthService from './api/auth';
 
 const history = createWebHistory();
 
 const routes = [
-  { path: '/', component: Home },
-  { 
-    path: '/about',
-    name: 'about',
-    component: About, 
-    children: [
-      {
-        path: 'nested', 
-        components: {
-          nestedView: NestedComponent
-        }
-      },
-    ]
-  },
-  { 
-    path: '/random-number/:number',
-    component: NumberPage,
-    name: 'random-number',
-    redirect: '/'
-  },
+  { path: '/', component: Home, beforeEnter: loginRequired },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+},
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
 ];
 
@@ -36,5 +20,13 @@ const router = createRouter({
   history,
   routes,
 });
+
+function loginRequired (to, from, next) {
+  if (AuthService.authenticated()) {
+    next()
+  } else {
+    next('/login')
+  }
+}
 
 export default router;
