@@ -1,34 +1,31 @@
 import { app } from './firebaseDb';
 import { getAuth, signOut, signInWithEmailAndPassword } from "firebase/auth";
 
-const auth = getAuth(app);
+const VUE_USER_NAME = 'vue-user-name';
 
 const AuthService = {
   user: null,
   authenticated() {
-    if (this.user == null) {
+    if (window.localStorage.getItem(VUE_USER_NAME) === '') {
       return false
     } else {
-      return !this.user.isAnonymous
+      return true
     }
   },
   setUser(user) {
-    this.user = user;
+    window.localStorage.setItem(VUE_USER_NAME, user)
   },
-  async login (email, password) {
+  login (email, password) {
       try {
-        const user = await signInWithEmailAndPassword(auth, email, password);
-        this.setUser(user);
-        return user;
+        this.setUser({name: 'Vasia'});
       } catch (e) {
         console.log(e);
       }
   },
 
-  async logout () {
+  logout () {
     try {
-        await signOut(auth);
-        this.setUser(null);
+        this.setUser('');
       } catch (e) {
         console.log(e);
       }
