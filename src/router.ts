@@ -1,19 +1,32 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import Home from './components/Home.vue';
+import Main from './components/Main.vue';
 import Login from './components/Login.vue';
-import NotFound from './components/NotFound.vue';
+import InfoComponent from './components/InfoComponent.vue';
 import AuthService from './api/auth';
 
 const history = createWebHistory();
 
 const routes = [
-  { path: '/', component: Home, beforeEnter: loginRequired },
+  {
+    path: '/',
+    component: Main,
+    children: [ 
+      {
+        path: '/', 
+        component: Home,
+      },
+      {
+        path: '/info',
+        component: InfoComponent,
+      }
+    ]
+  },
   {
     path: '/login',
     name: 'login',
     component: Login
-},
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
+  },
 ];
 
 const router = createRouter({
@@ -21,8 +34,12 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach(loginRequired);
+
+const exludedRoutes = ['login', 'signup', 'forgot-password'];
+
 function loginRequired (to, from, next) {
-  if (AuthService.authenticated()) {
+  if (AuthService.authenticated() || exludedRoutes.includes(to.name)) {
     next()
   } else {
     next('/login')

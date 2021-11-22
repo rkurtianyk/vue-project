@@ -1,44 +1,15 @@
 <template>
   <v-container>
     <h1>
-      <span>TO DO list</span>
-      <button @click="logout()">Logout</button>
+      Home
       </h1>
-    <div class="filter-panel">
-      <label for="show-only-done">Show only done</label>
-      <input id="show-only-done" type="checkbox" v-model="showOnlyDone" >
-    </div>
-    <div class="list">
-      <div v-for="todo in todos" :key="todo.id" class="list-item">
 
-        <div v-if="currentEditingTodo !== todo.id" :class="{'strike-through': todo.done}" class="text">{{todo.text}}</div>
-        <input v-if="currentEditingTodo === todo.id" class="text" v-model="todo.text" v-on:change="editTodo(todo)"/>
-
-        <button @click="editClick(todo)">
-                    <span v-if="currentEditingTodo !== todo.id">
-                      <font-awesome-icon icon="edit" />
-                    </span>                    
-                    <span v-if="currentEditingTodo === todo.id">
-                      <font-awesome-icon icon="check" />
-                    </span>
-        </button>
-        <button @click="changeDone(todo)">
-           <font-awesome-icon icon="thumbs-up" />
-        </button>
-
-        <button @click="deleteTodo(todo.id)"> <font-awesome-icon icon="trash-alt" /></button>
-      </div>
-    </div>
-
-    <div>
-      <h3>Please enter new todo</h3>
-      <input type="text" v-model="currentTodoText"/>
-      <button @click="saveNewTodo()">Save</button>
-    </div>
+      <router-view></router-view>
   </v-container>
 
 </template> 
 <script>
+import BreedService from '../api/breedService';
 import { db, } from '../api/firebaseDb';
 import AuthService from '../api/auth';
 import { getTodos, addTodo, deleteTodo, updateTodo } from '../api/todo';
@@ -48,10 +19,18 @@ export default {
   computed: {
     todos() {
       return this.firebaseTodos;
+    },
+    breeds() {
+      if (this.loadedBreeds && this.loadedBreeds.length > 1) {
+        return this.loadedBreeds;
+      } else {
+        return [];
+      }
+
     }
   },
   async created() {
-    await this.loadTodos();
+    await this.loadBreeds();
   },
   data() {
    return {
@@ -59,7 +38,8 @@ export default {
      showOnlyDone: false,
      currentTodos: [],
      firebaseTodos: [],
-     currentTodoText: ''
+     currentTodoText: '',
+     loadedBreeds: [],
    }
   },
   methods: {
@@ -73,8 +53,8 @@ export default {
       }
 
     },
-    async loadTodos() {
-      this.firebaseTodos = await getTodos(db);
+    async loadBreeds() {
+      this.loadedBreeds = await BreedService.getList();
     },
     async changeDone(todo) {
       const data = {
@@ -87,9 +67,6 @@ export default {
       } catch (e) {
         console.error(e);
       }
-    },
-    checkboxChange(event) {
-      console.log(event);
     },
     async saveNewTodo () {
       if (this.currentTodoText.length > 0) {
@@ -145,7 +122,7 @@ export default {
   }
 
   .text {
-    width: 200px;
+    width: 500px;
     color: blue;
   }
 
