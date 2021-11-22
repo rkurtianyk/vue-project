@@ -3,8 +3,11 @@
     <h1>
       Home
       </h1>
+<<<<<<< HEAD
 
       <router-view></router-view>
+=======
+>>>>>>> a112bd051efe871dcbee340b59eb790cdb71ebdf
   </v-container>
 
 </template> 
