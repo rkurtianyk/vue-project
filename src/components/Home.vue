@@ -2,7 +2,14 @@
   <v-container>
     <h1>
       Home
-      </h1>
+    </h1>
+
+    <div>
+      Dog's list 
+    </div>
+    <div>
+      <button @click="addNewDog()">Add new Dog</button>
+    </div>
   </v-container>
 
 </template> 
@@ -28,7 +35,7 @@ export default {
     }
   },
   async created() {
-    await this.loadBreeds();
+   
   },
   data() {
    return {
@@ -41,68 +48,19 @@ export default {
    }
   },
   methods: {
-    async editClick(todo) {
-      if (todo.id === this.currentEditingTodo) {
-        await this.editTodo(todo);
-        this.currentEditingTodo = '';
-        await this.loadTodos();
-      } else {
-      this.currentEditingTodo = todo.id;
-      }
+   addNewDog() {
+     const isUserAuthenticated = AuthService.authenticated();
 
-    },
-    async loadBreeds() {
-      this.loadedBreeds = await BreedService.getList();
-    },
-    async changeDone(todo) {
-      const data = {
-        text: todo.text,
-        done: !todo.done,
-      }
-      try {
-        await updateTodo(db, todo.id, data);
-        await this.loadTodos();
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    async saveNewTodo () {
-      if (this.currentTodoText.length > 0) {
+     if (!isUserAuthenticated) {
+       alert('Please login first');
+       return;
+     }
 
-       try {
-          await addTodo(db, this.currentTodoText);
-          this.currentTodoText = '';
-          await this.loadTodos();
-       } catch (e) {
-         console.error(e);
-       }
-      }
+    alert('Business logic here')
+    // Тут пишемо все що хочемо зробити для авторизованого користувача
 
-    },
-    async deleteTodo(id) {
-        try {
-          await deleteTodo(db, id);
-          await this.loadTodos();
-       } catch (e) {
-         console.error(e);
-       }
-    },
-    async editTodo(todo) {
-      const data = {
-        text: todo.text,
-        done: todo.done,
-      }
-      try {
-        await updateTodo(db, todo.id, data);
-        await this.loadTodos();
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    async logout() {
-      AuthService.logout();
-      this.$router.push('/login')
-    }
+
+   }
   }
 
 }

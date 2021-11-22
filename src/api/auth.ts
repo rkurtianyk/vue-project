@@ -17,10 +17,13 @@ const AuthService = {
   },
   login (email, password) {
       try {
-        this.setUser({name: 'Vasia'});
+        this.setUser('Vasia');
       } catch (e) {
         console.log(e);
       }
+  },
+  getUserName() {
+    return window.localStorage.getItem(VUE_USER_NAME)
   },
 
   logout () {

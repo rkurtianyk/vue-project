@@ -10,17 +10,7 @@ const history = createWebHistory();
 const routes = [
   {
     path: '/',
-    component: Main,
-    children: [ 
-      {
-        path: '/', 
-        component: Home,
-      },
-      {
-        path: '/info',
-        component: InfoComponent,
-      }
-    ]
+    component: Home,
   },
   {
     path: '/login',
@@ -34,12 +24,12 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(loginRequired);
+// router.beforeEach(loginRequired);
 
 const exludedRoutes = ['login', 'signup', 'forgot-password'];
 
 function loginRequired (to, from, next) {
-  if (AuthService.authenticated() || exludedRoutes.includes(to.name)) {
+  if (AuthService.authenticated()) {
     next()
   } else {
     next('/login')
